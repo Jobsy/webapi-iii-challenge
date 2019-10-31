@@ -22,4 +22,10 @@ function logger(req, res, next) {
   next();
 }
 
+// function validateUserId(req, res, next) {
+//   const { id } = req.params;
+
+//   next();
+// }
+
 module.exports = server;
