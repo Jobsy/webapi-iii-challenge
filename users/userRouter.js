@@ -51,23 +51,23 @@ router.get('/', (req, res) => {
         })
 });
 
-router.get('/:id', (req, res) => {
-    const { id } = req.params;
+router.get('/:id', validateUserId, (req, res) => {
+    // const { id } = req.params;
 
-    dB.getById(id)
-        .then((users) => {
+    // dB.getById(id)
+    //     .then((users) => {
 
-            if (users.length === 0) {
-                res.status(404).json({ message: "The user with the specified ID does not exist." })
-            }
-            res.status(200).json({ users: users })
-        })
-        .catch(() => {
-            res.status(500).json({ error: "The user information could not be retrieved." })
-        })
+    //         if (users.length === 0) {
+    //             res.status(404).json({ message: "The user with the specified ID does not exist." })
+    //         }
+            res.status(200).json({ users: req.users })
+        // })
+        // .catch(() => {
+        //     res.status(500).json({ error: "The user information could not be retrieved." })
+        // })
 });
 
-router.get('/:id/posts', (req, res) => {
+router.get('/:id/posts', validateUserId, (req, res) => {
     const { id } = req.params;
 
     dB.getUserPosts(id)
@@ -123,7 +123,20 @@ router.put('/:id', (req, res) => {
 //custom middleware
 
 function validateUserId(req, res, next) {
+    const { id } = req.params;
 
+    dB.getById(id)
+        .then((users) => {
+
+            if (users.length === 0) {
+                res.status(404).json({ message: "The user with the specified ID does not exist." })
+            }
+            req.users = users;
+            next();
+        })
+        .catch(() => {
+            res.status(500).json({ error: "The user information could not be retrieved." })
+        })
 };
 
 function validateUser(req, res, next) {
