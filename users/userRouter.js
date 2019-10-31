@@ -71,7 +71,24 @@ router.delete('/:id', (req, res) => {
 });
 
 router.put('/:id', (req, res) => {
+    const user = req.body;
+    const { name} = req.body;
+    const { url } = req;
+    const { id } = req.params;
 
+    if (!name) {
+        res.status(400).json({ errorMessage: "Please provide name for the user." })
+    }
+    dB.update(id, user)
+        .then((usersID) => {
+            if (usersID) {
+                res.status(200).json({ updatedUser: user, url: url, operation: "POST" })
+            }
+            res.status(404).json({ message: "The user with the specified ID does not exist." })
+        })
+        .catch(() => {
+            res.status(500).json({ error: "The user information could not be modified." })
+        })
 });
 
 //custom middleware
