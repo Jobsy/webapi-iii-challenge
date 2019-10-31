@@ -23,7 +23,19 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
+    const { id } = req.params;
 
+    dB.getById(id)
+        .then((users) => {
+
+            if (users.length === 0) {
+                res.status(404).json({ message: "The user with the specified ID does not exist." })
+            }
+            res.status(200).json({ users: users })
+        })
+        .catch(() => {
+            res.status(500).json({ error: "The user information could not be retrieved." })
+        })
 });
 
 router.get('/:id/posts', (req, res) => {
