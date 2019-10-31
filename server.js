@@ -3,9 +3,10 @@ const express = require("express");
 const server = express();
 
 const router = require("./users/userRouter");
-
+const router2 = require("./posts/postRouter");
 server.use(express.json());
 server.use("/api/users", router);
+server.use("/api/posts", router2);
 
 server.use(logger);
 
