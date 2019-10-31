@@ -68,19 +68,19 @@ router.get('/:id', validateUserId, (req, res) => {
 });
 
 router.get('/:id/posts', validateUserId, (req, res) => {
-    const { id } = req.params;
+    // const { id } = req.params;
 
-    dB.getUserPosts(id)
-        .then((posts) => {
+    // dB.getUserPosts(id)
+    //     .then((posts) => {
 
-            if (posts.length === 0) {
-                res.status(404).json({ message: "The post with the specified ID does not exist." })
-            }
-            res.status(200).json({ posts: posts })
-        })
-        .catch(() => {
-            res.status(500).json({ error: "The post information could not be retrieved." })
-        })
+    //         if (posts.length === 0) {
+    //             res.status(404).json({ message: "The post with the specified ID does not exist." })
+    //         }
+            res.status(200).json({ posts: req.users })
+        // })
+        // .catch(() => {
+        //     res.status(500).json({ error: "The post information could not be retrieved." })
+        // })
 });
 
 router.delete('/:id', (req, res) => {
