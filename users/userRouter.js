@@ -88,7 +88,7 @@ router.delete('/:id', validateUserId, (req, res) => {
     const { id } = req.users;
 
     dB.remove(id)
-        .then((rmPost) => {
+        .then(() => {
             // if (rmPost === 0) {
             //     res.status(404).json({ message: "The post with the specified ID does not exist." })
             // }
@@ -99,25 +99,26 @@ router.delete('/:id', validateUserId, (req, res) => {
         // })
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', validateUserId, (req, res) => {
     const user = req.body;
     const { name } = req.body;
     const { url } = req;
-    const { id } = req.params;
+    // const { id } = req.params;
+    const { id } = req.users;
 
     if (!name) {
         res.status(400).json({ errorMessage: "Please provide name for the user." })
     }
     dB.update(id, user)
-        .then((usersID) => {
-            if (usersID) {
+        // .then((usersID) => {
+                //   if (usersID) {
                 res.status(200).json({ updatedUser: user, url: url, operation: "POST" })
-            }
-            res.status(404).json({ message: "The user with the specified ID does not exist." })
-        })
-        .catch(() => {
-            res.status(500).json({ error: "The user information could not be modified." })
-        })
+            // }
+            // res.status(404).json({ message: "The user with the specified ID does not exist." })
+        // })
+        // .catch(() => {
+        //     res.status(500).json({ error: "The user information could not be modified." })
+        // })
 });
 
 //custom middleware
