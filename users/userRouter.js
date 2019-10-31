@@ -5,7 +5,19 @@ const dB = require("./userDb");
 const router = express.Router();
 
 router.post('/', (req, res) => {
-
+    const user = req.body;
+    const { name } = req.body;
+    const { url } = req;
+    if (!name) {
+        res.status(400).json({ errorMessage: "Please provide name for the user." })
+    }
+    dB.insert(user)
+        .then(() => {
+            res.status(201).json({ postedContent: user, url: url, operation: "POST" })
+        })
+        .catch((err) => {
+            res.status(500).json({ error: "There was an error while saving the user to the database" + err })
+        })
 });
 
 router.post('/:id/posts', (req, res) => {
