@@ -60,11 +60,11 @@ router.get('/:id', validateUserId, (req, res) => {
     //         if (users.length === 0) {
     //             res.status(404).json({ message: "The user with the specified ID does not exist." })
     //         }
-            res.status(200).json({ users: req.users })
-        // })
-        // .catch(() => {
-        //     res.status(500).json({ error: "The user information could not be retrieved." })
-        // })
+    res.status(200).json({ users: req.users })
+    // })
+    // .catch(() => {
+    //     res.status(500).json({ error: "The user information could not be retrieved." })
+    // })
 });
 
 router.get('/:id/posts', validateUserId, (req, res) => {
@@ -76,15 +76,15 @@ router.get('/:id/posts', validateUserId, (req, res) => {
     //         if (posts.length === 0) {
     //             res.status(404).json({ message: "The post with the specified ID does not exist." })
     //         }
-            res.status(200).json({ posts: req.users })
-        // })
-        // .catch(() => {
-        //     res.status(500).json({ error: "The post information could not be retrieved." })
-        // })
+    res.status(200).json({ posts: req.users })
+    // })
+    // .catch(() => {
+    //     res.status(500).json({ error: "The post information could not be retrieved." })
+    // })
 });
 
 router.delete('/:id', validateUserId, (req, res) => {
-    
+
     const { id } = req.users;
 
     dB.remove(id)
@@ -94,14 +94,14 @@ router.delete('/:id', validateUserId, (req, res) => {
             // }
             res.status(200).json({ removedPost: `post with id: ${id} deleted` })
         })
-        .catch(() => {
-            res.status(500).json({ error: "The post could not be removed" })
-        })
+        // .catch(() => {
+        //     res.status(500).json({ error: "The post could not be removed" })
+        // })
 });
 
 router.put('/:id', (req, res) => {
     const user = req.body;
-    const { name} = req.body;
+    const { name } = req.body;
     const { url } = req;
     const { id } = req.params;
 
@@ -128,14 +128,19 @@ function validateUserId(req, res, next) {
     dB.getById(id)
         .then((users) => {
 
-            if (users.length === 0) {
-                res.status(404).json({ message: "The user with the specified ID does not exist." })
+            // if (users.length === 0) {
+            //     res.status(404).json({ message: "The user with the specified ID does not exist." })
+            // }
+            // req.users = users;
+            // next();
+            if (users) {
+                req.users = users;
+                next();
             }
-            req.users = users;
-            next();
+            res.status(404).json({ message: "The user with the specified ID does not exist." })
         })
         .catch((err) => {
-            res.status(500).json({ error: "The user information could not be retrieved."  + err})
+            res.status(500).json({ error: "The user information could not be retrieved." + err })
         })
 };
 
