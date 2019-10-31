@@ -2,7 +2,10 @@ const express = require("express");
 
 const server = express();
 
+const router = require("./users/userRouter");
+
 server.use(express.json());
+server.use("/api/users", router);
 
 server.use(logger);
 
