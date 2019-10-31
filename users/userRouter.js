@@ -21,16 +21,19 @@ router.post('/', (req, res) => {
         })
 });
 
-router.post('/:id/posts', (req, res) => {
+router.post('/:id/posts', validateUserId, (req, res) => {
     const user = req.body;
     const { text } = req.body;
     const { url } = req;
-    const { id } = req.params;
+    // const { id } = req.params;
+    const { id } = req.users;
+
     if (!text) {
         res.status(400).json({ errorMessage: "Please provide text for the comment." })
     }
     postDb.insert({text, user_id: id})
-        .then(() => {
+        .then((aaaa) => {
+            console.log(aaaa)
             // if (usersID > 0) {
                 res.status(201).json({ postedContent: user, url: url, operation: "POST" })
             // }
@@ -129,22 +132,26 @@ function validateUserId(req, res, next) {
 
     dB.getById(id)
         .then((users) => {
-
+            console.log("???: ", users)
             // if (users.length === 0) {
             //     res.status(404).json({ message: "The user with the specified ID does not exist." })
             // }
             // req.users = users;
             // next();
+            
             if (users) {
                 req.users = users;
+                console.log("im innnnnnnn")
                 next();
             }
+            else {
             res.status(404).json({ message: "The user with the specified ID does not exist." })
+            }
         })
         .catch((err) => {
             res.status(500).json({ error: "The user information could not be retrieved." + err })
         })
-};
+}
 
 function validateUser(req, res, next) {
 
