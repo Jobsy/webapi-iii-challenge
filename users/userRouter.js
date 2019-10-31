@@ -21,6 +21,23 @@ router.post('/', (req, res) => {
 });
 
 router.post('/:id/posts', (req, res) => {
+    // const user = req.body;
+    // const { text } = req.body;
+    // const { url } = req;
+    // const { id } = req.params;
+    // if (!text) {
+    //     res.status(400).json({ errorMessage: "Please provide text for the comment." })
+    // }
+    // dB.insert(user)
+    //     .then((usersID) => {
+    //         if (usersID > 0) {
+    //             res.status(201).json({ postedContent: user, url: url, operation: "POST" })
+    //         }
+    //         res.status(404).json({ message: "The user with the specified ID does not exist." })
+    //     })
+    //     .catch((err) => {
+    //         res.status(500).json({ error: "There was an error while saving the comment to the database: " + err })
+    //     })
 
 });
 
