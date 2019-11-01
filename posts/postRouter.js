@@ -46,21 +46,23 @@ router.delete('/:id', validatePostId, (req, res) => {
         })
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', validatePostId, (req, res) => {
     const post = req.body;
     const { text } = req.body;
     const { url } = req;
-    const { id } = req.params;
+    // const { id } = req.params;
+    const { id } = req.posts;
+
 
     if (!text) {
         res.status(400).json({ errorMessage: "Please provide text for the post." })
     }
     postDb.update(id, post)
         .then((usersID) => {
-            if (usersID) {
+            // if (usersID) {
                 res.status(200).json({ updatedContent: post, url: url, operation: "PUT" })
-            }
-            res.status(404).json({ message: "The post with the specified ID does not exist." })
+            // }
+            // res.status(404).json({ message: "The post with the specified ID does not exist." })
         })
         .catch((err) => {
             res.status(500).json({ error: "The post information could not be modified." + err })
