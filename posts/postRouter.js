@@ -6,28 +6,28 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
     postDb.get()
-    .then((posts) => {
-        res.status(200).json(posts)
-    })
-    .catch(() => {
-        res.status(500).json({ error: "The posts information could not be retrieved." })
-    })
-});
-
-router.get('/:id', (req, res) => {
-    const { id } = req.params;
-
-    postDb.getById(id)
         .then((posts) => {
-
-            if (posts.length === 0) {
-                res.status(404).json({ message: "The post with the specified ID does not exist." })
-            }
-            res.status(200).json({ posts: posts })
+            res.status(200).json(posts)
         })
         .catch(() => {
-            res.status(500).json({ error: "The post information could not be retrieved." })
+            res.status(500).json({ error: "The posts information could not be retrieved." })
         })
+});
+
+router.get('/:id', validatePostId, (req, res) => {
+    // const { id } = req.params;
+// console.log("LKLKKK: ", req.post)
+    // postDb.getById(id)
+    //     .then((posts) => {
+
+    //         if (posts.length === 0) {
+    //             res.status(404).json({ message: "The post with the specified ID does not exist." })
+    //         }
+    res.status(200).json({ posts: req.posts })
+    // })
+    // .catch(() => {
+    //     res.status(500).json({ error: "The post information could not be retrieved." })
+    // })
 });
 
 router.delete('/:id', (req, res) => {
@@ -47,7 +47,7 @@ router.delete('/:id', (req, res) => {
 
 router.put('/:id', (req, res) => {
     const post = req.body;
-    const { text} = req.body;
+    const { text } = req.body;
     const { url } = req;
     const { id } = req.params;
 
@@ -62,14 +62,28 @@ router.put('/:id', (req, res) => {
             res.status(404).json({ message: "The post with the specified ID does not exist." })
         })
         .catch((err) => {
-            res.status(500).json({ error: "The post information could not be modified." + err})
+            res.status(500).json({ error: "The post information could not be modified." + err })
         })
 });
 
 // custom middleware
 
 function validatePostId(req, res, next) {
+    const { id } = req.params;
 
-};
+    postDb.getById(id)
+        .then((posts) => {
+            if (posts) {
+                req.posts = posts;
+                next();
+            }
+            else {
+                res.status(404).json({ message: "The post with the specified ID does not exist." })
+            }
+        })
+        .catch(() => {
+            res.status(500).json({ error: "The post information could not be retrieved." })
+        })
+}
 
 module.exports = router;
